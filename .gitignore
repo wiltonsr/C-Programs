@@ -1,0 +1,8 @@
+# Ignore everthing
+*
+# What don't ignore
+!*.c
+!Makefile
+!.gitignore
+!READMNE.md
+!LICENSE
