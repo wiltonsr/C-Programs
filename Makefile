@@ -1,6 +1,6 @@
-OBJECTS		= month_name.o echo.o
+OBJECTS		= month_name.o echo.o linked-list.o palindrome.o fgets_and_sscanf.o
 LIBRARIES	=
-PROGRAMS	= month_name echo
+PROGRAMS	= month_name echo linked-list palindrome fgets_and_sscanf
 CC = gcc
 
 .PHONY:         all clean
