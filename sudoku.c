@@ -78,12 +78,43 @@ void print_grid(int_grid_t int_grid){
   }
 }
 
+int used_in_row(int_grid_t grid, int row, int number){
+  int i;
+  for (i = 0; i < GRID_SIZE; ++i){
+    if (grid.position[row][i] == number)
+      return 1;
+  }
+  return 0;
+}
+
+int used_in_col(int_grid_t grid, int col, int number){
+  int i;
+  for (i = 0; i < GRID_SIZE; ++i){
+    if (grid.position[i][col] == number)
+      return 1;
+  }
+  return 0;
+}
+
+int used_in_box(int_grid_t grid, int i_row, int i_col, int number){
+  int i, j;
+  for (i = 0; i < 3; ++i)
+    for (j = 0; j < 3; ++j){
+      if (grid.position[i + i_row][j + i_col] == number)
+        return true;
+    }
+  return false;
+}
+
 int main(int argc, char *argv[]){
   int i, j;
 
   char_grid_t temp_char_grid = read_grid();
-  int_grid_t temp_int_grid = convert_grid_to_int(temp_char_grid);
-  print_grid(temp_int_grid);
+  int_grid_t sudoku = convert_grid_to_int(temp_char_grid);
+  print_grid(sudoku);
+  int s;
+  s = used_in_row(sudoku, 0, 5);
+  printf("%d\n", s);
 
   return 0;
 }
