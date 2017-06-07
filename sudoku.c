@@ -85,45 +85,45 @@ void print_grid(sudoku_t sudoku){
 }
 
 // Check if the passed element exist in passed row
-int used_in_row(sudoku_t grid, int row, int number){
+int used_in_row(sudoku_t *grid, int row, int number){
   int i;
   for (i = 0; i < GRID_SIZE; ++i){
-    if (grid.position[row][i].value == number)
+    if (grid->position[row][i].value == number)
       return 1;
   }
   return 0;
 }
 
 // Check if the passed element exist in passed column
-int used_in_col(sudoku_t grid, int col, int number){
+int used_in_col(sudoku_t *grid, int col, int number){
   int i;
   for (i = 0; i < GRID_SIZE; ++i){
-    if (grid.position[i][col].value == number)
+    if (grid->position[i][col].value == number)
       return 1;
   }
   return 0;
 }
 
 // Check if the passed element exist in passed box
-int used_in_box(sudoku_t grid, int i_row, int i_col, int number){
+int used_in_box(sudoku_t *grid, int i_row, int i_col, int number){
   int i, j;
   for (i = 0; i < 3; ++i)
     for (j = 0; j < 3; ++j){
-      if (grid.position[i + i_row][j + i_col].value == number)
+      if (grid->position[i + i_row][j + i_col].value == number)
         return 1;
     }
   return 0;
 }
 
-int is_empty(sudoku_t grid, int row, int col){
-  if(grid.position[row][col].value == EMPTY){
+int is_empty(sudoku_t *grid, int row, int col){
+  if(grid->position[row][col].value == EMPTY){
     return 1;
   }
   else
     return 0;
 }
 
-int is_safe(sudoku_t grid, int row, int col, int number){
+int is_safe(sudoku_t *grid, int row, int col, int number){
   if (is_empty(grid, row, col) &&
       !used_in_row(grid, row, number) &&
       !used_in_col(grid, col, number) &&
@@ -143,8 +143,35 @@ void initialize_possibilities(sudoku_t *grid){
   }
 }
 
+void check_possibilities(sudoku_t *grid){
+  int i, j, k;
+  for (i = 0; i < GRID_SIZE; ++i) {
+    for (j = 0; j < GRID_SIZE; ++j) {
+      for (k = 1; k <= GRID_SIZE; ++k) {
+        if(is_safe(grid, i, j, k)){
+          int pos = grid->position[i][j].qtd_possibilities;
+          grid->position[i][j].possibilities[pos] = k;
+          grid->position[i][j].qtd_possibilities += 1;
+          /* printf("R=%dC=%dPOS=%d\n", i, j, pos); */
+        }
+      }
+      if(grid->position[i][j].qtd_possibilities == 1){
+        grid->position[i][j].value = grid->position[i][j].possibilities[0];
+      }
+    }
+  }
+}
+
+void printf_possibilities(sudoku_t *grid, int row, int col){
+  int qtd = grid->position[row][col].qtd_possibilities;
+  for (int i = 0; i < qtd; ++i) {
+    printf("%d ", grid->position[row][col].possibilities[i]);
+  }
+}
+
 void solve_sudoku(sudoku_t *grid){
   initialize_possibilities(grid);
+  check_possibilities(grid);
 }
 
 int main(int argc, char *argv[]){
@@ -156,8 +183,10 @@ int main(int argc, char *argv[]){
 
   sudoku_t *ps = &sudoku;
   solve_sudoku(ps);
+  /* printf("%d\n", sudoku.position[7][7].qtd_possibilities); */
 
-
+  /* printf_possibilities(ps, 7, 7); */
+  printf("###############################\n");
   print_grid(sudoku);
 
   return 0;
