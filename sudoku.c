@@ -7,8 +7,8 @@ Wilton Rodrigues - 13/0049212 - GG
 #include <stdlib.h>
 #include <string.h>
 
-// Sum of numbers, spaces and \0
-#define LINE_SIZE 18
+// Sum of numbers, spaces, \n and \0
+#define LINE_SIZE 19
 // Default grid size
 #define GRID_SIZE 9
 #define EMPTY 0
@@ -30,7 +30,7 @@ char_grid_t read_grid(){
   char_grid_t char_grid;
 
   for (i = 0; i < GRID_SIZE; ++i) {
-    fgets(buffer, sizeof(buffer) * GRID_SIZE, stdin);
+    fgets(buffer, sizeof(buffer), stdin);
     strcpy(char_grid.position[i], buffer);
     // Add \0 for last line element
     char_grid.position[i][LINE_SIZE - 1] = '\0';
@@ -78,6 +78,7 @@ void print_grid(int_grid_t int_grid){
   }
 }
 
+// Check if the passed element exist in passed row
 int used_in_row(int_grid_t grid, int row, int number){
   int i;
   for (i = 0; i < GRID_SIZE; ++i){
@@ -87,6 +88,7 @@ int used_in_row(int_grid_t grid, int row, int number){
   return 0;
 }
 
+// Check if the passed element exist in passed column
 int used_in_col(int_grid_t grid, int col, int number){
   int i;
   for (i = 0; i < GRID_SIZE; ++i){
@@ -96,14 +98,15 @@ int used_in_col(int_grid_t grid, int col, int number){
   return 0;
 }
 
+// Check if the passed element exist in passed box
 int used_in_box(int_grid_t grid, int i_row, int i_col, int number){
   int i, j;
   for (i = 0; i < 3; ++i)
     for (j = 0; j < 3; ++j){
       if (grid.position[i + i_row][j + i_col] == number)
-        return true;
+        return 1;
     }
-  return false;
+  return 0;
 }
 
 int main(int argc, char *argv[]){
@@ -112,9 +115,6 @@ int main(int argc, char *argv[]){
   char_grid_t temp_char_grid = read_grid();
   int_grid_t sudoku = convert_grid_to_int(temp_char_grid);
   print_grid(sudoku);
-  int s;
-  s = used_in_row(sudoku, 0, 5);
-  printf("%d\n", s);
 
   return 0;
 }
