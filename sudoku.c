@@ -21,7 +21,8 @@ typedef struct char_grid_t{
 // Define a type to represent a single element
 typedef struct element_t{
   int value;
-  int possibilits[GRID_SIZE];
+  int possibilities[GRID_SIZE];
+  int qtd_possibilities;
 } element_t;
 
 // Define a type to put the cleaned data
@@ -123,11 +124,31 @@ int is_safe(sudoku_t grid, int row, int col, int number){
     return 0;
 }
 
+
+void initialize_possibilities(sudoku_t *grid){
+  int i, j;
+  for (i = 0; i < GRID_SIZE; ++i) {
+    for (j = 0; j < GRID_SIZE; ++j) {
+      grid->position[i][j].qtd_possibilities = 0;
+    }
+  }
+}
+
+void solve_sudoku(sudoku_t *grid){
+  initialize_possibilities(grid);
+}
+
 int main(int argc, char *argv[]){
   /* int i, j; */
 
   char_grid_t temp_char_grid = read_grid();
   sudoku_t sudoku = convert_grid_to_int(temp_char_grid);
+  print_grid(sudoku);
+
+  sudoku_t *ps = &sudoku;
+  solve_sudoku(ps);
+
+
   print_grid(sudoku);
 
   return 0;
