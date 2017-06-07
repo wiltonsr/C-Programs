@@ -115,8 +115,17 @@ int used_in_box(sudoku_t grid, int i_row, int i_col, int number){
   return 0;
 }
 
+int is_empty(sudoku_t grid, int row, int col){
+  if(grid.position[row][col].value == EMPTY){
+    return 1;
+  }
+  else
+    return 0;
+}
+
 int is_safe(sudoku_t grid, int row, int col, int number){
-  if (!used_in_row(grid, row, number) &&
+  if (is_empty(grid, row, col) &&
+      !used_in_row(grid, row, number) &&
       !used_in_col(grid, col, number) &&
       !used_in_box(grid, row - row % 3 , col - col % 3, number))
     return 1;
