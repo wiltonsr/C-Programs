@@ -26,7 +26,7 @@ typedef struct int_grid_t{
 // Read input from stdin and allocate to char matrix
 char_grid_t read_grid(){
   char buffer[LINE_SIZE];
-  int i, j;
+  int i;
   char_grid_t char_grid;
 
   for (i = 0; i < GRID_SIZE; ++i) {
@@ -109,8 +109,17 @@ int used_in_box(int_grid_t grid, int i_row, int i_col, int number){
   return 0;
 }
 
+int is_safe(int_grid_t grid, int row, int col, int number){
+  if (!used_in_row(grid, row, number) &&
+      !used_in_col(grid, col, number) &&
+      !used_in_box(grid, row - row % 3 , col - col % 3, number))
+    return 1;
+  else
+    return 0;
+}
+
 int main(int argc, char *argv[]){
-  int i, j;
+  /* int i, j; */
 
   char_grid_t temp_char_grid = read_grid();
   int_grid_t sudoku = convert_grid_to_int(temp_char_grid);
