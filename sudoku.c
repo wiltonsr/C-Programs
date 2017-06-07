@@ -167,6 +167,7 @@ void printf_possibilities(sudoku_t *grid, int row, int col){
   for (int i = 0; i < qtd; ++i) {
     printf("%d ", grid->position[row][col].possibilities[i]);
   }
+  printf("\n");
 }
 
 void solve_sudoku(sudoku_t *grid){
@@ -174,19 +175,29 @@ void solve_sudoku(sudoku_t *grid){
   check_possibilities(grid);
 }
 
+int is_solved(sudoku_t *grid){
+  int i, j;
+  for (i = 0; i < GRID_SIZE; ++i) {
+    for (j = 0; j < GRID_SIZE; ++j) {
+      if(grid->position[i][j].value == EMPTY){
+        return 0;
+      }
+    }
+  }
+  return 1;
+}
+
 int main(int argc, char *argv[]){
-  /* int i, j; */
 
   char_grid_t temp_char_grid = read_grid();
   sudoku_t sudoku = convert_grid_to_int(temp_char_grid);
-  print_grid(sudoku);
 
   sudoku_t *ps = &sudoku;
-  solve_sudoku(ps);
-  /* printf("%d\n", sudoku.position[7][7].qtd_possibilities); */
 
-  /* printf_possibilities(ps, 7, 7); */
-  printf("###############################\n");
+  while(!is_solved(ps)){
+    solve_sudoku(ps);
+  }
+
   print_grid(sudoku);
 
   return 0;
